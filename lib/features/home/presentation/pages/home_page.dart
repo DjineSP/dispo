@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/app_settings_provider.dart';
+import '../../../../core/providers/auth_provider.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 
 class MyHomePage extends ConsumerWidget {
@@ -20,6 +21,14 @@ class MyHomePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n?.app_name ?? "Dispo"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              ref.read(authProvider.notifier).logout();
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

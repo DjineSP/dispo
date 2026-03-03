@@ -13,6 +13,7 @@ class DispoApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Parameters listeners
     final settings = ref.watch(appSettingsProvider);
+    final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
       title: 'Dispo',
@@ -29,7 +30,7 @@ class DispoApp extends ConsumerWidget {
       themeMode: settings.themeMode,
       
 			// Router
-      routerConfig: AppRouter.router,
+      routerConfig: router,
     );
   }
 }

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../core/providers/splash_provider.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _slideAnimation;
   late Animation<double> _revealAnimation;
@@ -48,9 +50,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         if (mounted) _controller.forward();
       });
 
+      // Au lieu de dire "Va sur telle page", le Splash Screen annonce juste :
+      // "Mon animation de 3 secondes est terminée !"
+      // C'est le routeur central (app_router) qui prendra le relai instantanément.
       Future.delayed(const Duration(milliseconds: 3000), () {
         if (mounted) {
-          context.go('/home');
+          ref.read(splashAnimationCompletedProvider.notifier).complete();
         }
       });
     });
@@ -86,11 +91,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   // Le logo glisse vers la gauche
                   Transform.translate(
                     offset: Offset(initialXOffset * (1 - _slideAnimation.value), 0),
-                    child: Image.asset(
-                      'assets/logo_2.png',
-                      height: logoHeight,
-                      width: logoWidth,
-                      fit: BoxFit.contain,
+                    child: Hero(
+                      tag: 'app_logo',
+                      child: Image.asset(
+                        'assets/logo_2.png',
+                        height: logoHeight,
+                        width: logoWidth,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
 
