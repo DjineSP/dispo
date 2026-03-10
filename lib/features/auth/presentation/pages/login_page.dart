@@ -180,29 +180,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ],
 
-                // 3. Login Button
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accent,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: const Text(
-                      'Se connecter',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.accent,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : const Text(
+                          'Se connecter',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
                 const SizedBox(height: 32),
 
                 // 4. Biometric Option 
@@ -210,8 +215,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: Column(
                     children: [
                       IconButton(
-                        onPressed: () {
-                          // TODO: Implement biometric auth logic
+                        onPressed: () async {
+                            // Biometric Auth: Bypass _isLoading state
+                            try {
+                                await ref.read(authProvider.notifier).login(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                );
+                            } catch (e) {
+                                if (mounted) {
+                                  setState(() {
+                                    _errorMessage = e.toString();
+                                  });
+                                }
+                            }
                         },
                         icon: const Icon(Icons.fingerprint, size: 64),
                         color: AppColors.accent.withOpacity(0.7),

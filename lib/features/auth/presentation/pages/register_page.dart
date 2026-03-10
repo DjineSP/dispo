@@ -14,7 +14,7 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   
@@ -39,7 +39,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     try {
       await ref.read(authProvider.notifier).register(
         _nameController.text,
-        _emailController.text,
+        _phoneController.text,
         _passwordController.text,
       );
     } catch (e) {
@@ -130,15 +130,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 const SizedBox(height: 18),
 
                 const Text(
-                  'Email',
+                  'Numéro de téléphone',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
+                  controller: _phoneController,
+                  keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
-                  decoration: _buildInputDecoration('Entrez votre adresse email'),
+                  decoration: _buildInputDecoration('Entrez votre numéro de téléphone'),
                 ),
                 const SizedBox(height: 18),
 
@@ -202,29 +202,34 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ],
 
-                // 3. Register Button
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  ElevatedButton(
-                    onPressed: _register,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accent,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: const Text(
-                      'S\'inscrire',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _register,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.accent,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    minimumSize: const Size(double.infinity, 56),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : const Text(
+                          'S\'inscrire',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
                 const SizedBox(height: 24),
               ],
             ),

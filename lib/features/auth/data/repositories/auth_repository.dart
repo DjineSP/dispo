@@ -8,7 +8,7 @@ class AuthRepository {
 
   AuthRepository(this._dio);
 
-  Future<String> login(String email, String password) async {
+  Future<String> login(String login, String password) async {
     try {
 
       await Future.delayed(const Duration(seconds: 2));
@@ -20,9 +20,8 @@ class AuthRepository {
     }
   }
 
-  Future<void> register(String email, String password, String name) async {
+  Future<void> register(String phone, String password, String name) async {
      try {  
-       // TODO: Replace with actual register endpoint
        await Future.delayed(const Duration(seconds: 2));
      } catch (e) {
        rethrow;

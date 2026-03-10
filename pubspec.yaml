@@ -121,7 +121,8 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#f8fafc"
-  color_dark: "#0b1121"
+  # color_dark: "#0b1121"
+  color_dark: "#f8fafc"
   image: "assets/logo.png"
   image_dark: "assets/logo.png"
   android: true
@@ -130,6 +131,7 @@ flutter_native_splash:
   # Support for Android 12+ Splash Screen 
   android_12:
     color: "#f8fafc"
-    color_dark: "#0b1121"
+    # color_dark: "#0b1121"
+    color_dark: "#f8fafc"
     image: "assets/logo_padded.png"
     image_dark: "assets/logo_padded.png"

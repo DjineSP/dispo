@@ -5,56 +5,59 @@ class SupportedServicesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final services = [
-      {'name': 'Orange Money', 'image': 'assets/images/logo_orange.png'},
-      {'name': 'MTN Money', 'image': 'assets/images/logo_mtn.jpg'},
-      {'name': 'Cellcom', 'image': 'assets/images/logo_cellcom.jpeg'},
-      {'name': 'Canal+', 'image': 'assets/images/logo_canal.jpg'},
-      {'name': 'StarTimes', 'image': 'assets/images/logo_startime.jpg'},
+    final List<Map<String, String>> services = [
+      {'image': 'assets/images/logo_orange.png', 'name': 'Orange Money'},
+      {'image': 'assets/images/logo_mtn.jpg', 'name': 'MTN Money'},
+      {'image': 'assets/images/logo_cellcom.png', 'name': 'Cellcom'},
+      {'image': 'assets/images/logo_canal.jpg', 'name': 'Canal+'},
+      {'image': 'assets/images/logo_startime.png', 'name': 'StarTimes'},
     ];
 
-    // Disposition type "Puzzle" occupant le maximum de place
     return Expanded(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final w = constraints.maxWidth;
-          final h = constraints.maxHeight;
+          final double w = constraints.maxWidth;
+          final double h = constraints.maxHeight;
+          
+          // Augmentation de la taille : 35% de la largeur de l'écran
+          final double logoSize = w * 0.35; 
 
           return Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
-              // Haut Gauche - Orange Money
+              // 1. Orange Money - Haut Gauche (Ajusté plus près du bord)
               Positioned(
-                left: w * 0.05,
-                top: h * 0.1,
-                child: _buildPuzzlePiece('assets/images/logo_orange.png', w * 0.28, -0.1),
+                left: w * 0.02,
+                top: h * 0.08,
+                child: _buildPuzzlePiece(services[0]['image']!, logoSize, -0.12),
               ),
               
-              // Haut Droite - Canal+
+              // 2. Canal+ - Haut Droite
               Positioned(
                 right: w * 0.02,
-                top: h * 0.05,
-                child: _buildPuzzlePiece('assets/images/logo_canal.jpg', w * 0.25, 0.15),
+                top: h * 0.02,
+                child: _buildPuzzlePiece(services[3]['image']!, logoSize, 0.08),
               ),
               
-              // Centre - MTN (Le plus gros, mis en valeur)
+              // 3. MTN Money - Centre (Légèrement décalé pour le style)
               Positioned(
-                child: _buildPuzzlePiece('assets/images/logo_mtn.jpg', w * 0.40, 0),
+                top: h * 0.35,
+                child: _buildPuzzlePiece(services[1]['image']!, logoSize, 0.05),
               ),
               
-              // Bas Gauche - Cellcom
+              // 4. Cellcom - Bas Gauche
               Positioned(
-                left: w * 0.1,
-                bottom: h * 0.08,
-                child: _buildPuzzlePiece('assets/images/logo_cellcom.webp', w * 0.25, -0.2),
+                left: w * 0.05,
+                bottom: h * 0.05,
+                child: _buildPuzzlePiece(services[2]['image']!, logoSize, -0.08),
               ),
               
-              // Bas Droite - StarTimes
+              // 5. StarTimes - Bas Droite
               Positioned(
-                right: w * 0.08,
-                bottom: h * 0.12,
-                child: _buildPuzzlePiece('assets/images/logo_startime.jpg', w * 0.28, 0.08),
+                right: w * 0.05,
+                bottom: h * 0.1,
+                child: _buildPuzzlePiece(services[4]['image']!, logoSize, 0.15),
               ),
             ],
           );
@@ -63,16 +66,30 @@ class SupportedServicesWidget extends StatelessWidget {
     );
   }
 
-  // Helper pour construire une "pièce" sans bordure ni fond, juste l'image d'origine
   Widget _buildPuzzlePiece(String imagePath, double size, double rotation) {
     return Transform.rotate(
       angle: rotation,
-      child: SizedBox(
+      child: Container(
         width: size,
         height: size,
+        // Padding ajusté pour que le logo soit bien grand dans le cercle
+        padding: EdgeInsets.all(size * 0.18), 
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         child: Image.asset(
           imagePath,
-          fit: BoxFit.contain, // Assure que le logo est entièrement visible
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) => 
+              const Icon(Icons.image_not_supported, color: Colors.grey),
         ),
       ),
     );

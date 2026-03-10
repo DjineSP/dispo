@@ -24,25 +24,22 @@ class AuthNotifier extends Notifier<AuthStatus> {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String login, String password) async {
     final authRepository = ref.read(authRepositoryProvider);
-    final token = await authRepository.login(email, password);
+    final token = await authRepository.login(login, password);
     await StorageService.instance.secureWrite('access_token', token);
     state = AuthStatus.authenticated;
   }
 
-  Future<void> register(String name, String email, String password) async {
+  Future<void> register(String name, String phone, String password) async {
     final authRepository = ref.read(authRepositoryProvider);
-    await authRepository.register(email, password, name);
-    // Auto-login after successful registration (depending on standard behavior)
-    // Or just let them go to login. For now, we will just call login if it was real,
-    // but the mock register doesn't return a token. Let's just mock a login.
-    state = AuthStatus.authenticated;
+    await authRepository.register(phone, password, name);
+    state = AuthStatus.unauthenticated;
   }
 
   Future<void> logout() async {
     await StorageService.instance.secureRemove('access_token');
-    state = AuthStatus.unauthenticated;
+    state = AuthStatus.authenticated;
   }
 }
 

@@ -27,7 +27,8 @@ class DispoApp extends ConsumerWidget {
 			// Dynamic theme management
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: settings.themeMode,
+      // themeMode: settings.themeMode,
+      themeMode: ThemeMode.light,
       
 			// Router
       routerConfig: router,
